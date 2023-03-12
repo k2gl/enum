@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Examples;
+namespace K2gl\Enum\Tests\Examples;
 
 use K2gl\Enum\ExtendedBackedEnum;
 use K2gl\Enum\ExtendedBackedEnumInterface;

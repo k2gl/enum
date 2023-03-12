@@ -29,12 +29,21 @@ enum ResponseCode: int implements ExtendedBackedEnumInterface
     use ExtendedBackedEnum;
 
     case HTTP_OK = 200;
+    case HTTP_I_AM_A_TEAPOT = 418;
 }
 
-CardSuit::SPADES->is($cardSuit); // $cardSuit is string or implement StringBackedEnum
-ResponseCode::HTTP_OK->not($responseCode); // $responseCode is int or implement IntBackedEnum
+$variable = CardSuit::SPADES;
+$variable->is(CardSuit::SPADES); // true
+$variable->is('spades'); // true
+$variable->is(CardSuit::HEARTS); // false
 
-$enum = CardSuit::random();
+$variable = ResponseCode::HTTP_I_AM_A_TEAPOT;
+$variable->not(200); // true
+$variable->not(ResponseCode::HTTP_OK); // true
+$variable->not(418); // false
+$variable->not(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
+
+$random = CardSuit::random();
 $names = CardSuit::names();
 $values = CardSuit::values();
 ```

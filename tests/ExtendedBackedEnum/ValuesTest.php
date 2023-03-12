@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\ExtendedBackedEnum;
+namespace K2gl\Enum\Tests\ExtendedBackedEnum;
 
-use App\Tests\Examples\CardSuit;
-use App\Tests\Examples\ResponseCode;
+use K2gl\Enum\Tests\Examples\CardSuit;
+use K2gl\Enum\Tests\Examples\ResponseCode;
 use PHPUnit\Framework\TestCase;
 use function K2gl\PHPUnitFluentAssertions\fact;
 
