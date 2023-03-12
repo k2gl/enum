@@ -1,0 +1,33 @@
+{
+  "name": "k2gl/enum",
+  "description": "PHP BackedEnum spiced with syntactic sugar",
+  "homepage": "https://github.com/k2gl/enum",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "php",
+    "backedenum"
+  ],
+  "authors": [
+    {
+      "name": "Nickolay Harin",
+      "email": "l0gic@ya.ru"
+    }
+  ],
+  "require": {
+    "php": ">=8.1"
+  },
+  "require-dev": {
+    "k2gl/phpunit-fluent-assertions": "^1.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "K2gl\\Enum\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "K2gl\\Enum\\Tests\\": "tests/"
+    }
+  }
+}
