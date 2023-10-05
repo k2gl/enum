@@ -29,5 +29,6 @@
     "psr-4": {
       "K2gl\\Enum\\Tests\\": "tests/"
     }
-  }
+  },
+  "minimum-stability": "stable"
 }

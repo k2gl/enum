@@ -11,8 +11,7 @@ composer require k2gl/enum
 ## Usage
 
 ```php
-use K2gl\Enum\ExtendedBackedEnum;
-use K2gl\Enum\ExtendedBackedEnumInterface;
+use K2gl\Enum\src\ExtendedBackedEnumInterface;use K2gl\Enum\Types\ExtendedBackedEnum\ExtendedBackedEnum;
 
 enum CardSuit: string implements ExtendedBackedEnumInterface
 {
