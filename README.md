@@ -31,20 +31,23 @@ enum ResponseCode: int implements ExtendedBackedEnumInterface
     case HTTP_I_AM_A_TEAPOT = 418;
 }
 
-$variable = CardSuit::SPADES;
-$variable->is(CardSuit::SPADES); // true
-$variable->is('spades'); // true
-$variable->is(CardSuit::HEARTS); // false
+$suit = CardSuit::any(); // random CardSuit 
+$suit = CardSuit::anyoneExcept(CardSuit::CLUBS); // random CardSuit except 'clubs'
+$suit = CardSuit::anyoneExcept([CardSuit::HEARTS, CardSuit::DIAMONDS]); // random CardSuit except 'hearts' and 'diamonds'
 
-$variable = ResponseCode::HTTP_I_AM_A_TEAPOT;
-$variable->isNot(200); // true
-$variable->isNot(ResponseCode::HTTP_OK); // true
-$variable->isNot(418); // false
-$variable->isNot(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
+$suit = CardSuit::SPADES;
+$suit->is(CardSuit::SPADES); // true
+$suit->is('spades'); // true
+$suit->is(CardSuit::HEARTS); // false
 
-$any = CardSuit::any();
-$names = CardSuit::names();
-$values = CardSuit::values();
+$suit = ResponseCode::HTTP_I_AM_A_TEAPOT;
+$suit->isNot(200); // true
+$suit->isNot(ResponseCode::HTTP_OK); // true
+$suit->isNot(418); // false
+$suit->isNot(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
+
+CardSuit::names(); // ['HEARTS', 'DIAMONDS', 'CLUBS', 'SPADES'] 
+CardSuit::values(); // ['hearts', 'diamonds', 'clubs', 'spades']
 ```
 
 ## Pull requests are always welcome
