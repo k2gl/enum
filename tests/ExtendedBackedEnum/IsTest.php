@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use function K2gl\PHPUnitFluentAssertions\fact;
 
 /**
- * @covers \K2gl\EnumHelper\BackedEnumTrait::is
+ * @covers \K2gl\Enum\ExtendedBackedEnum::is()
  */
 final class IsTest extends TestCase
 {

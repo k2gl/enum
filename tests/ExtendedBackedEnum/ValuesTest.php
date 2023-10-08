@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use function K2gl\PHPUnitFluentAssertions\fact;
 
 /**
- * @covers \K2gl\EnumHelper\BackedEnumTrait::values
+ * @covers \K2gl\Enum\ExtendedBackedEnum::values()
  */
 final class ValuesTest extends TestCase
 {

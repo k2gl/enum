@@ -6,13 +6,18 @@ use BackedEnum;
 
 interface ExtendedBackedEnumInterface
 {
-    public static function names(): array;
+    public static function any(): static;
 
-    public static function values(): array;
-
-    public static function random(): BackedEnum;
+    /**
+     * @param self|non-empty-array<static> $except
+     */
+    public static function anyoneExcept(BackedEnum|array $except): static;
 
     public function is(mixed $value): bool;
 
-    public function not(mixed $value): bool;
+    public function isNot(mixed $value): bool;
+
+    public static function names(): array;
+
+    public static function values(): array;
 }

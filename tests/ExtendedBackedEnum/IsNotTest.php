@@ -10,17 +10,17 @@ use PHPUnit\Framework\TestCase;
 use function K2gl\PHPUnitFluentAssertions\fact;
 
 /**
- * @covers \K2gl\EnumHelper\BackedEnumTrait::not
+ * @covers \K2gl\Enum\ExtendedBackedEnum::isNot()
  */
-final class NotTest extends TestCase
+final class IsNotTest extends TestCase
 {
     /**
      * @dataProvider notSameDataProvider
      */
-    public function testNotSame(ExtendedBackedEnumInterface $enum, mixed $compare): void
+    public function testWhenIsNotSame(ExtendedBackedEnumInterface $enum, mixed $compare): void
     {
         // act
-        $isNotSame = $enum->not($compare);
+        $isNotSame = $enum->isNot($compare);
 
         // assert
         fact($isNotSame)->true();
@@ -29,10 +29,10 @@ final class NotTest extends TestCase
     /**
      * @dataProvider sameDataProvider
      */
-    public function testSame(ExtendedBackedEnumInterface $enum, mixed $compare): void
+    public function testWhenSame(ExtendedBackedEnumInterface $enum, mixed $compare): void
     {
         // act
-        $isNotSame = $enum->not($compare);
+        $isNotSame = $enum->isNot($compare);
 
         // assert
         fact($isNotSame)->false();

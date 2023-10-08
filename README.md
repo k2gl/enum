@@ -37,12 +37,12 @@ $variable->is('spades'); // true
 $variable->is(CardSuit::HEARTS); // false
 
 $variable = ResponseCode::HTTP_I_AM_A_TEAPOT;
-$variable->not(200); // true
-$variable->not(ResponseCode::HTTP_OK); // true
-$variable->not(418); // false
-$variable->not(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
+$variable->isNot(200); // true
+$variable->isNot(ResponseCode::HTTP_OK); // true
+$variable->isNot(418); // false
+$variable->isNot(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
 
-$random = CardSuit::random();
+$any = CardSuit::any();
 $names = CardSuit::names();
 $values = CardSuit::values();
 ```
