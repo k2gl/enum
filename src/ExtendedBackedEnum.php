@@ -1,15 +1,21 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace K2gl\Enum;
 
+use function array_diff;
+use function array_rand;
+
 use BackedEnum;
+
+use function is_array;
 
 use ValueError;
 
-use function array_diff;
-use function array_rand;
-use function is_array;
-
+/**
+ * @phpstan-require-implements ExtendedBackedEnumInterface
+ */
 trait ExtendedBackedEnum
 {
     public static function any(): static
@@ -59,7 +65,7 @@ trait ExtendedBackedEnum
     }
 
     /**
-     * @return array<int, string>
+     * @return list<string>
      */
     public static function names(): array
     {
@@ -67,7 +73,7 @@ trait ExtendedBackedEnum
     }
 
     /**
-     * @return array<int, string>
+     * @return list<value-of<static>>
      */
     public static function values(): array
     {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace K2gl\Enum\Tests\ExtendedBackedEnum;
 
@@ -6,17 +8,15 @@ use K2gl\Enum\ExtendedBackedEnumInterface;
 use K2gl\Enum\Tests\Examples\CardSuit;
 use K2gl\Enum\Tests\Examples\NotResponseCode;
 use K2gl\Enum\Tests\Examples\ResponseCode;
-use PHPUnit\Framework\TestCase;
+
 use function K2gl\PHPUnitFluentAssertions\fact;
 
-/**
- * @covers \K2gl\Enum\ExtendedBackedEnum::is()
- */
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
 final class IsTest extends TestCase
 {
-    /**
-     * @dataProvider sameDataProvider
-     */
+    #[DataProvider('sameDataProvider')]
     public function testSame(ExtendedBackedEnumInterface $enum, mixed $compare): void
     {
         // act
@@ -26,9 +26,7 @@ final class IsTest extends TestCase
         fact($isSame)->true();
     }
 
-    /**
-     * @dataProvider notSameDataProvider
-     */
+    #[DataProvider('notSameDataProvider')]
     public function testNotSame(ExtendedBackedEnumInterface $enum, mixed $compare): void
     {
         // act
@@ -38,7 +36,7 @@ final class IsTest extends TestCase
         fact($isSame)->false();
     }
 
-    private function notSameDataProvider(): array
+    public static function notSameDataProvider(): array
     {
         return [
             [CardSuit::CLUBS, null],
@@ -55,7 +53,7 @@ final class IsTest extends TestCase
         ];
     }
 
-    private function sameDataProvider(): array
+    public static function sameDataProvider(): array
     {
         return [
             [CardSuit::CLUBS, 'clubs'],

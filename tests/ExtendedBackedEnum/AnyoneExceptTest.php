@@ -1,19 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace K2gl\Enum\Tests\ExtendedBackedEnum;
 
-use K2gl\Enum\ExtendedBackedEnum;
 use K2gl\Enum\Tests\Examples\ResponseCode;
-use PHPUnit\Framework\TestCase;
-
-use ValueError;
 
 use function K2gl\PHPUnitFluentAssertions\fact;
 
-/**
- * @covers \K2gl\Enum\ExtendedBackedEnum::anyoneExcept()
- */
+use PHPUnit\Framework\TestCase;
+use ValueError;
+
 final class AnyoneExceptTest extends TestCase
 {
     public function testExcludeOne(): void

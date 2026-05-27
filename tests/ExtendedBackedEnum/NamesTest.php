@@ -1,18 +1,18 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace K2gl\Enum\Tests\ExtendedBackedEnum;
 
 use K2gl\Enum\Tests\Examples\CardSuit;
 use K2gl\Enum\Tests\Examples\ResponseCode;
-use PHPUnit\Framework\TestCase;
+
 use function K2gl\PHPUnitFluentAssertions\fact;
 
-/**
- * @covers \K2gl\Enum\ExtendedBackedEnum::names()
- */
+use PHPUnit\Framework\TestCase;
+
 final class NamesTest extends TestCase
 {
-
     public function testNamesOfCardSuit(): void
     {
         // act

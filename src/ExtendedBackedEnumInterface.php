@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace K2gl\Enum;
 
 use BackedEnum;
 
-interface ExtendedBackedEnumInterface
+interface ExtendedBackedEnumInterface extends BackedEnum
 {
     public static function any(): static;
 
@@ -17,7 +19,13 @@ interface ExtendedBackedEnumInterface
 
     public function isNot(mixed $value): bool;
 
+    /**
+     * @return list<string>
+     */
     public static function names(): array;
 
+    /**
+     * @return list<int|string>
+     */
     public static function values(): array;
 }
