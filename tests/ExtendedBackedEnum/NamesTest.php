@@ -6,10 +6,9 @@ namespace K2gl\Enum\Tests\ExtendedBackedEnum;
 
 use K2gl\Enum\Tests\Examples\CardSuit;
 use K2gl\Enum\Tests\Examples\ResponseCode;
+use PHPUnit\Framework\TestCase;
 
 use function K2gl\PHPUnitFluentAssertions\fact;
-
-use PHPUnit\Framework\TestCase;
 
 final class NamesTest extends TestCase
 {

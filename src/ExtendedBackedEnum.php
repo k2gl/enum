@@ -4,13 +4,7 @@ declare(strict_types=1);
 
 namespace K2gl\Enum;
 
-use function array_diff;
-use function array_rand;
-
 use BackedEnum;
-
-use function is_array;
-
 use ValueError;
 
 /**
@@ -21,7 +15,7 @@ trait ExtendedBackedEnum
     public static function any(): static
     {
         $values = self::values();
-        $key    = array_rand($values);
+        $key    = \array_rand($values);
 
         return self::from($values[$key]);
     }
@@ -31,7 +25,7 @@ trait ExtendedBackedEnum
      */
     public static function anyoneExcept(BackedEnum|array $except): static
     {
-        if (is_array($except)) {
+        if (\is_array($except)) {
             $exceptValues = [];
 
             foreach ($except as $value) {
@@ -41,13 +35,13 @@ trait ExtendedBackedEnum
             $exceptValues = [$except->value];
         }
 
-        $values = array_diff(self::values(), $exceptValues);
+        $values = \array_diff(self::values(), $exceptValues);
 
-        if (!$values) {
+        if (! $values) {
             throw new ValueError('All possible values excluded');
         }
 
-        return self::from($values[array_rand($values)]);
+        return self::from($values[\array_rand($values)]);
     }
 
     public function is(mixed $value): bool
@@ -61,7 +55,7 @@ trait ExtendedBackedEnum
 
     public function isNot(mixed $value): bool
     {
-        return !$this->is($value);
+        return ! $this->is($value);
     }
 
     /**

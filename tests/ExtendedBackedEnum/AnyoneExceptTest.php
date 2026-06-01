@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace K2gl\Enum\Tests\ExtendedBackedEnum;
 
 use K2gl\Enum\Tests\Examples\ResponseCode;
-
-use function K2gl\PHPUnitFluentAssertions\fact;
-
 use PHPUnit\Framework\TestCase;
 use ValueError;
+
+use function K2gl\PHPUnitFluentAssertions\fact;
 
 final class AnyoneExceptTest extends TestCase
 {

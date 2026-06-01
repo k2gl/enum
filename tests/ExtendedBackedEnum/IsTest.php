@@ -8,11 +8,10 @@ use K2gl\Enum\ExtendedBackedEnumInterface;
 use K2gl\Enum\Tests\Examples\CardSuit;
 use K2gl\Enum\Tests\Examples\NotResponseCode;
 use K2gl\Enum\Tests\Examples\ResponseCode;
-
-use function K2gl\PHPUnitFluentAssertions\fact;
-
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
+use function K2gl\PHPUnitFluentAssertions\fact;
 
 final class IsTest extends TestCase
 {
