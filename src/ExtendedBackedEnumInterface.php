@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace K2gl\Enum;
 
 use BackedEnum;
+use ValueError;
 
 interface ExtendedBackedEnumInterface extends BackedEnum
 {
@@ -14,6 +15,13 @@ interface ExtendedBackedEnumInterface extends BackedEnum
      * @param self|non-empty-array<static> $except
      */
     public static function anyoneExcept(BackedEnum|array $except): static;
+
+    /**
+     * @throws ValueError when no case has the given name
+     */
+    public static function fromName(string $name): static;
+
+    public static function tryFromName(string $name): ?static;
 
     public function is(mixed $value): bool;
 
