@@ -17,7 +17,8 @@ composer require k2gl/enum
 ## Usage
 
 ```php
-use K2gl\Enum\src\ExtendedBackedEnumInterface;use K2gl\Enum\Types\ExtendedBackedEnum\ExtendedBackedEnum;
+use K2gl\Enum\ExtendedBackedEnum;
+use K2gl\Enum\ExtendedBackedEnumInterface;
 
 enum CardSuit: string implements ExtendedBackedEnumInterface
 {
@@ -54,6 +55,13 @@ $suit->isNot(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
 
 CardSuit::names(); // ['HEARTS', 'DIAMONDS', 'CLUBS', 'SPADES'] 
 CardSuit::values(); // ['hearts', 'diamonds', 'clubs', 'spades']
+
+// Resolve a case by its name — the counterpart of the native from()/tryFrom(),
+// which only resolve by backing value.
+CardSuit::fromName('SPADES');    // CardSuit::SPADES
+CardSuit::tryFromName('SPADES'); // CardSuit::SPADES
+CardSuit::tryFromName('joker');  // null
+CardSuit::fromName('joker');     // throws \ValueError
 ```
 
 ## Pull requests are always welcome

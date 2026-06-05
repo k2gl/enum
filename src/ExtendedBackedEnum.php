@@ -44,6 +44,31 @@ trait ExtendedBackedEnum
         return self::from($values[\array_rand($values)]);
     }
 
+    /**
+     * Resolve a case by its name, mirroring the native from() which only
+     * resolves by backing value.
+     *
+     * @throws ValueError when no case has the given name
+     */
+    public static function fromName(string $name): static
+    {
+        return self::tryFromName($name)
+            ?? throw new ValueError(
+                sprintf('"%s" is not a valid name for enum %s', $name, self::class)
+            );
+    }
+
+    public static function tryFromName(string $name): ?static
+    {
+        foreach (self::cases() as $case) {
+            if ($case->name === $name) {
+                return $case;
+            }
+        }
+
+        return null;
+    }
+
     public function is(mixed $value): bool
     {
         if ($value instanceof BackedEnum) {
