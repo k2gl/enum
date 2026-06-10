@@ -1,0 +1,38 @@
+name: Attest
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['*']
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: read
+
+jobs:
+  attest:
+    name: Build provenance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Build release tarball
+        run: |
+          version="${GITHUB_REF_NAME//\//-}"
+          tarball="enum-${version}.tar.gz"
+          git archive --format=tar.gz --prefix="enum-${version}/" --output="${tarball}" "${GITHUB_SHA}"
+          echo "tarball=${tarball}" >> "$GITHUB_ENV"
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: ${{ env.tarball }}
+
+      - name: Upload tarball
+        uses: actions/upload-artifact@v7
+        with:
+          name: tarball
+          path: ${{ env.tarball }}
