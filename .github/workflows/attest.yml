@@ -1,38 +1,100 @@
 name: Attest
 
 on:
-  workflow_dispatch:
   push:
-    tags: ['*']
+    tags: ['[0-9]*.[0-9]*.[0-9]*']
 
 permissions:
-  id-token: write
-  attestations: write
   contents: read
 
 jobs:
   attest:
     name: Build provenance
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Build release tarball
         run: |
-          version="${GITHUB_REF_NAME//\//-}"
-          tarball="enum-${version}.tar.gz"
-          git archive --format=tar.gz --prefix="enum-${version}/" --output="${tarball}" "${GITHUB_SHA}"
+          tarball="enum-${GITHUB_REF_NAME}.tar.gz"
+          git archive --format=tar.gz --prefix="enum-${GITHUB_REF_NAME}/" --output="${tarball}" "${GITHUB_SHA}"
           echo "tarball=${tarball}" >> "$GITHUB_ENV"
 
       - name: Attest build provenance
-        uses: actions/attest-build-provenance@v4
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         with:
           subject-path: ${{ env.tarball }}
 
-      - name: Upload tarball
-        uses: actions/upload-artifact@v7
+      - name: Download attestation bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh attestation download "${tarball}" --repo "${GITHUB_REPOSITORY}"
+          mv sha256:*.jsonl "${tarball}.sigstore.jsonl"
+
+      - name: Hand off signed artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: tarball
-          path: ${{ env.tarball }}
+          name: signed-release
+          path: |
+            *.tar.gz
+            *.sigstore.jsonl
+          if-no-files-found: error
+
+  release:
+    name: Publish release assets
+    needs: attest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Fetch signed artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: signed-release
+
+      - name: Create release with assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --verify-tag \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            *.tar.gz *.sigstore.jsonl \
+          || gh release upload "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" --clobber *.tar.gz *.sigstore.jsonl
+
+  verify:
+    name: Verify published release
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" \
+            --pattern '*.tar.gz' --pattern '*.sigstore.jsonl'
+
+      - name: Verify attestation (online)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh attestation verify *.tar.gz --repo "${GITHUB_REPOSITORY}"
+
+      - name: Verify attestation (offline bundle)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh attestation verify *.tar.gz --repo "${GITHUB_REPOSITORY}" --bundle *.sigstore.jsonl
