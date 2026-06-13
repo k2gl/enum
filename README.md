@@ -64,6 +64,45 @@ CardSuit::tryFromName('joker');  // null
 CardSuit::fromName('joker');     // throws \ValueError
 ```
 
+### Labels and form options
+
+Attach a human-readable label to a case with `#[Label]`. `label()` returns it,
+falling back to the raw case name when the attribute is absent; `options()`
+builds a `value => label` map ready for a dropdown.
+
+```php
+use K2gl\Enum\ExtendedBackedEnum;
+use K2gl\Enum\ExtendedBackedEnumInterface;
+use K2gl\Enum\Label;
+
+enum OrderStatus: string implements ExtendedBackedEnumInterface
+{
+    use ExtendedBackedEnum;
+
+    #[Label('Awaiting payment')]
+    case PENDING = 'pending';
+
+    #[Label('Paid')]
+    case PAID = 'paid';
+
+    case SHIPPED = 'shipped'; // no #[Label] — label() falls back to the name
+}
+
+OrderStatus::PENDING->label(); // 'Awaiting payment'
+OrderStatus::SHIPPED->label(); // 'SHIPPED'
+
+OrderStatus::options();
+// ['pending' => 'Awaiting payment', 'paid' => 'Paid', 'shipped' => 'SHIPPED']
+
+// Render an HTML <select>:
+foreach (OrderStatus::options() as $value => $label) {
+    echo "<option value=\"{$value}\">{$label}</option>";
+}
+
+// Symfony ChoiceType expects label => value, so flip it:
+// 'choices' => array_flip(OrderStatus::options())
+```
+
 ## Pull requests are always welcome
 [Collaborate with pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 
