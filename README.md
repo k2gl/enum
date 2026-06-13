@@ -53,6 +53,13 @@ $suit->isNot(ResponseCode::HTTP_OK); // true
 $suit->isNot(418); // false
 $suit->isNot(ResponseCode::HTTP_I_AM_A_TEAPOT); // false
 
+// Set membership — is()/isNot() for a list of cases or raw values.
+$suit = CardSuit::SPADES;
+$suit->in(CardSuit::HEARTS, CardSuit::SPADES); // true
+$suit->in('hearts', 'clubs');                  // false
+$suit->in(...[CardSuit::HEARTS, CardSuit::SPADES]); // true (spread an array)
+$suit->notIn(CardSuit::HEARTS, CardSuit::CLUBS);    // true
+
 CardSuit::names(); // ['HEARTS', 'DIAMONDS', 'CLUBS', 'SPADES'] 
 CardSuit::values(); // ['hearts', 'diamonds', 'clubs', 'spades']
 
