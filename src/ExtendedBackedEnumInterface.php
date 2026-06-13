@@ -27,6 +27,10 @@ interface ExtendedBackedEnumInterface extends BackedEnum
 
     public function isNot(mixed $value): bool;
 
+    public function in(mixed ...$values): bool;
+
+    public function notIn(mixed ...$values): bool;
+
     /**
      * @return list<string>
      */

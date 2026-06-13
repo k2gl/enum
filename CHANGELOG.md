@@ -4,6 +4,14 @@ All notable changes to this package are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-06-13
+
+### Added
+
+- `in()` and `notIn()` for set membership, mirroring `is()`/`isNot()`: variadic,
+  accepting cases or raw backing values (mixable), e.g. `$status->in(A, B)` or
+  `$status->in(...$cases)`.
+
 ## [2.2.0] - 2026-06-13
 
 ### Added
@@ -46,6 +54,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Initial release: `any()`, `anyoneExcept()`, `is()`/`isNot()`, `names()`,
   `values()`.
 
+[2.3.0]: https://github.com/k2gl/enum/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/k2gl/enum/compare/2.1.0...2.2.0
 [2.1.0]: https://github.com/k2gl/enum/compare/2.0.2...2.1.0
 [2.0.2]: https://github.com/k2gl/enum/compare/2.0.0...2.0.2

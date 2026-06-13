@@ -84,6 +84,22 @@ trait ExtendedBackedEnum
         return ! $this->is($value);
     }
 
+    public function in(mixed ...$values): bool
+    {
+        foreach ($values as $value) {
+            if ($this->is($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function notIn(mixed ...$values): bool
+    {
+        return ! $this->in(...$values);
+    }
+
     /**
      * @return list<string>
      */
