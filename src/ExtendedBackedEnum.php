@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace K2gl\Enum;
 
 use BackedEnum;
+use ReflectionEnum;
 use ValueError;
 
 /**
@@ -97,5 +98,39 @@ trait ExtendedBackedEnum
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    /**
+     * Human-readable label of this case, taken from its #[Label] attribute;
+     * falls back to the raw case name when the attribute is absent.
+     */
+    public function label(): string
+    {
+        $attributes = (new ReflectionEnum(self::class))
+            ->getCase($this->name)
+            ->getAttributes(Label::class);
+
+        if (! $attributes) {
+            return $this->name;
+        }
+
+        return $attributes[0]->newInstance()->text;
+    }
+
+    /**
+     * Map of backing value => label for every case, ready for an HTML <select>
+     * or a Symfony ChoiceType (flip for the latter: array_flip(self::options())).
+     *
+     * @return array<value-of<static>, string>
+     */
+    public static function options(): array
+    {
+        $options = [];
+
+        foreach (self::cases() as $case) {
+            $options[$case->value] = $case->label();
+        }
+
+        return $options;
     }
 }
