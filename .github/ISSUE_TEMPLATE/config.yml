@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report Code of Conduct or abuse
+    url: https://github.com/contact/report-abuse
+    about: Report conduct violations or abuse to GitHub Support.
