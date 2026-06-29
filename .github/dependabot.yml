@@ -8,3 +8,18 @@ updates:
       github-actions:
         patterns:
           - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      composer:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
