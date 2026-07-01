@@ -47,4 +47,16 @@ interface ExtendedBackedEnumInterface extends BackedEnum
      * @return array<int|string, string>
      */
     public static function options(): array;
+
+    /**
+     * @return list<string>
+     */
+    public static function labels(): array;
+
+    /**
+     * @throws ValueError when no case has the given label
+     */
+    public static function fromLabel(string $label): static;
+
+    public static function tryFromLabel(string $label): ?static;
 }

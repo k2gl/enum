@@ -149,4 +149,45 @@ trait ExtendedBackedEnum
 
         return $options;
     }
+
+    /**
+     * Human-readable labels of every case, in declaration order.
+     *
+     * @return list<string>
+     */
+    public static function labels(): array
+    {
+        $labels = [];
+
+        foreach (self::cases() as $case) {
+            $labels[] = $case->label();
+        }
+
+        return $labels;
+    }
+
+    /**
+     * Resolve a case by its human-readable label, the reverse of label(). When
+     * several cases share a label the first in declaration order wins.
+     *
+     * @throws ValueError when no case has the given label
+     */
+    public static function fromLabel(string $label): static
+    {
+        return self::tryFromLabel($label)
+            ?? throw new ValueError(
+                sprintf('"%s" is not a valid label for enum %s', $label, self::class)
+            );
+    }
+
+    public static function tryFromLabel(string $label): ?static
+    {
+        foreach (self::cases() as $case) {
+            if ($case->label() === $label) {
+                return $case;
+            }
+        }
+
+        return null;
+    }
 }

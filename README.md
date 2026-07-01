@@ -75,7 +75,8 @@ CardSuit::fromName('joker');     // throws \ValueError
 
 Attach a human-readable label to a case with `#[Label]`. `label()` returns it,
 falling back to the raw case name when the attribute is absent; `options()`
-builds a `value => label` map ready for a dropdown.
+builds a `value => label` map ready for a dropdown; `labels()` lists every
+label; and `fromLabel()`/`tryFromLabel()` resolve a case back from its label.
 
 ```php
 use K2gl\Enum\ExtendedBackedEnum;
@@ -108,6 +109,15 @@ foreach (OrderStatus::options() as $value => $label) {
 
 // Symfony ChoiceType expects label => value, so flip it:
 // 'choices' => array_flip(OrderStatus::options())
+
+OrderStatus::labels();
+// ['Awaiting payment', 'Paid', 'SHIPPED']
+
+// Reverse of label() — resolve a case from a (form-submitted) label:
+OrderStatus::fromLabel('Awaiting payment'); // OrderStatus::PENDING
+OrderStatus::tryFromLabel('Paid');          // OrderStatus::PAID
+OrderStatus::tryFromLabel('Refunded');      // null
+OrderStatus::fromLabel('Refunded');         // throws \ValueError
 ```
 
 ## Pull requests are always welcome
