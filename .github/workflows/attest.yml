@@ -14,7 +14,7 @@ jobs:
     permissions:
       id-token: write
       attestations: write
-      contents: read
+      contents: write
 
     steps:
       - name: Checkout
@@ -22,94 +22,5 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build release tarball
-        run: |
-          tarball="enum-${GITHUB_REF_NAME}.tar.gz"
-          git archive --format=tar.gz --prefix="enum-${GITHUB_REF_NAME}/" --output="${tarball}" "${GITHUB_SHA}"
-          echo "tarball=${tarball}" >> "$GITHUB_ENV"
-
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
-        with:
-          subject-path: ${{ env.tarball }}
-
-      # Composer installs the GitHub zipball, not the tarball above. Attest that
-      # exact artifact too, so composer-attest can verify the package at install.
-      - name: Fetch the Composer dist (zipball)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/zipball/${GITHUB_SHA}" \
-            -o composer-dist.zip
-
-      - name: Attest the Composer dist
-        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
-        with:
-          subject-path: composer-dist.zip
-
-      - name: Download attestation bundle
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh attestation download "${tarball}" --repo "${GITHUB_REPOSITORY}"
-          mv sha256:*.jsonl "${tarball}.sigstore.jsonl"
-
-      - name: Hand off signed artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: signed-release
-          path: |
-            *.tar.gz
-            *.sigstore.jsonl
-          if-no-files-found: error
-
-  release:
-    name: Publish release assets
-    needs: attest
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Fetch signed artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: signed-release
-
-      - name: Create release with assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --repo "${GITHUB_REPOSITORY}" \
-            --verify-tag \
-            --title "${GITHUB_REF_NAME}" \
-            --generate-notes \
-            *.tar.gz *.sigstore.jsonl \
-          || gh release upload "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" --clobber *.tar.gz *.sigstore.jsonl
-
-  verify:
-    name: Verify published release
-    needs: release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - name: Download release assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release download "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" \
-            --pattern '*.tar.gz' --pattern '*.sigstore.jsonl'
-
-      - name: Verify attestation (online)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh attestation verify *.tar.gz --repo "${GITHUB_REPOSITORY}"
-
-      - name: Verify attestation (offline bundle)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh attestation verify *.tar.gz --repo "${GITHUB_REPOSITORY}" --bundle *.sigstore.jsonl
+      - name: Attest the Composer package
+        uses: k2gl/composer-attest-action@v1
