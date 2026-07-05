@@ -33,6 +33,21 @@ jobs:
         with:
           subject-path: ${{ env.tarball }}
 
+      # Composer installs the GitHub zipball, not the tarball above. Attest that
+      # exact artifact too, so composer-attest can verify the package at install.
+      - name: Fetch the Composer dist (zipball)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/zipball/${GITHUB_SHA}" \
+            -o composer-dist.zip
+
+      - name: Attest the Composer dist
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          subject-path: composer-dist.zip
+
       - name: Download attestation bundle
         env:
           GH_TOKEN: ${{ github.token }}
