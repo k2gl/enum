@@ -28,11 +28,8 @@ final class FromLabelTest extends TestCase
     #[DataProvider('unknownLabelDataProvider')]
     public function testThrowsOnUnknownLabel(string $enumClass, string $label): void
     {
-        // assert
-        $this->expectException(ValueError::class);
-
-        // act
-        $enumClass::fromLabel($label);
+        // act + assert
+        fact(static fn () => $enumClass::fromLabel($label))->throws(ValueError::class);
     }
 
     public static function validLabelDataProvider(): array
