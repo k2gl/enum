@@ -34,3 +34,11 @@ jobs:
 
       - name: Pint (dry-run)
         run: vendor/bin/pint --test
+
+      - name: No native assertions in tests
+        run: |
+          dir=tests; [ -d "$dir" ] || dir=Tests
+          if grep -rnE '(self::|static::|\$this->|Assert::)assert[A-Za-z]*\(|->expectException' "$dir" 2>/dev/null; then
+            echo "::error::Tests must use fluent fact()/throws(), not native PHPUnit assertions."
+            exit 1
+          fi
