@@ -67,15 +67,11 @@ final class AnyoneExceptTest extends TestCase
 
     public function testExcludeAll(): void
     {
-        // assert
-        $this->expectException(ValueError::class);
-        $this->expectExceptionMessage('All possible values excluded');
-
-        // act
-        ResponseCode::anyoneExcept([
+        // act + assert
+        fact(static fn () => ResponseCode::anyoneExcept([
             ResponseCode::HTTP_CONTINUE,
             ResponseCode::HTTP_OK,
             ResponseCode::HTTP_I_AM_A_TEAPOT,
-        ]);
+        ]))->throws(ValueError::class, 'All possible values excluded');
     }
 }

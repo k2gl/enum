@@ -28,11 +28,8 @@ final class FromNameTest extends TestCase
     #[DataProvider('unknownNameDataProvider')]
     public function testThrowsOnUnknownName(string $enumClass, string $name): void
     {
-        // assert
-        $this->expectException(ValueError::class);
-
-        // act
-        $enumClass::fromName($name);
+        // act + assert
+        fact(static fn () => $enumClass::fromName($name))->throws(ValueError::class);
     }
 
     public static function validNameDataProvider(): array
