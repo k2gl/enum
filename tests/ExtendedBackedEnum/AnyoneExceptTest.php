@@ -18,11 +18,9 @@ final class AnyoneExceptTest extends TestCase
         $enum = ResponseCode::anyoneExcept([ResponseCode::HTTP_OK]);
 
         // assert
-        fact($enum instanceof ResponseCode)->true();
+        fact($enum)->instanceOf(ResponseCode::class);
         fact($enum->isNot(ResponseCode::HTTP_OK))->true();
-        fact(
-            $enum->is(ResponseCode::HTTP_CONTINUE) || $enum->is(ResponseCode::HTTP_I_AM_A_TEAPOT)
-        )->true();
+        fact([ResponseCode::HTTP_CONTINUE, ResponseCode::HTTP_I_AM_A_TEAPOT])->contains($enum);
     }
 
     public function testExcludeFewCaseA(): void
@@ -58,11 +56,9 @@ final class AnyoneExceptTest extends TestCase
         $enum = ResponseCode::anyoneExcept([ResponseCode::HTTP_I_AM_A_TEAPOT]);
 
         // assert
-        fact($enum instanceof ResponseCode)->true();
+        fact($enum)->instanceOf(ResponseCode::class);
         fact($enum->isNot(ResponseCode::HTTP_I_AM_A_TEAPOT))->true();
-        fact(
-            $enum->is(ResponseCode::HTTP_CONTINUE) || $enum->is(ResponseCode::HTTP_OK)
-        )->true();
+        fact([ResponseCode::HTTP_CONTINUE, ResponseCode::HTTP_OK])->contains($enum);
     }
 
     public function testExcludeAll(): void
