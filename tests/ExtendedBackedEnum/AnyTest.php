@@ -17,11 +17,7 @@ final class AnyTest extends TestCase
         $enum = ResponseCode::any();
 
         // assert
-        fact($enum instanceof ResponseCode)->true();
-        fact(
-            $enum->is(ResponseCode::HTTP_CONTINUE)
-            || $enum->is(ResponseCode::HTTP_OK)
-            || $enum->is(ResponseCode::HTTP_I_AM_A_TEAPOT)
-        )->true();
+        fact($enum)->instanceOf(ResponseCode::class);
+        fact([ResponseCode::HTTP_CONTINUE, ResponseCode::HTTP_OK, ResponseCode::HTTP_I_AM_A_TEAPOT])->contains($enum);
     }
 }
